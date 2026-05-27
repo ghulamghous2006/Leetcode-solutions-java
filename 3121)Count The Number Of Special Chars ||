@@ -1,0 +1,30 @@
+class Solution {
+    public int numberOfSpecialChars(String word) {
+        
+        int[] first = new int[128];
+        int[] last = new int[128];
+
+        for (int i = 1; i <= word.length(); i++) {
+            char ch = word.charAt(i - 1);
+
+            if (first[ch] == 0) {
+                first[ch] = i;
+            }
+
+            last[ch] = i;
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < 26; i++) {
+            char lower = (char)('a' + i);
+            char upper = (char)('A' + i);
+
+            if (last[lower] > 0 && last[lower] < first[upper]) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
