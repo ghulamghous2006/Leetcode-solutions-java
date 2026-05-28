@@ -1,0 +1,80 @@
+class Solution {
+    
+    class TrieNode {
+        TrieNode[] child = new TrieNode[26];
+        
+        // Store best index for this node
+        int idx;
+        int len;
+        
+        TrieNode(int idx, int len) {
+            this.idx = idx;
+            this.len = len;
+        }
+    }
+    
+    public int[] stringIndices(String[] wordsContainer, String[] wordsQuery) {
+        
+        // Find globally shortest word
+        int minLen = Integer.MAX_VALUE;
+        int minIdx = 0;
+        
+        for (int i = 0; i < wordsContainer.length; i++) {
+            
+            if (wordsContainer[i].length() < minLen) {
+                minLen = wordsContainer[i].length();
+                minIdx = i;
+            }
+        }
+        
+        TrieNode root = new TrieNode(minIdx, minLen);
+        
+        // Build Trie using reversed words
+        for (int i = 0; i < wordsContainer.length; i++) {
+            
+            String word = wordsContainer[i];
+            TrieNode curr = root;
+            
+            for (int j = word.length() - 1; j >= 0; j--) {
+                
+                int c = word.charAt(j) - 'a';
+                
+                if (curr.child[c] == null) {
+                    curr.child[c] = new TrieNode(i, word.length());
+                }
+                
+                curr = curr.child[c];
+                
+                // Update best candidate
+                if (word.length() < curr.len) {
+                    curr.len = word.length();
+                    curr.idx = i;
+                }
+            }
+        }
+        
+        int[] ans = new int[wordsQuery.length];
+        
+        // Process queries
+        for (int i = 0; i < wordsQuery.length; i++) {
+            
+            String query = wordsQuery[i];
+            TrieNode curr = root;
+            
+            for (int j = query.length() - 1; j >= 0; j--) {
+                
+                int c = query.charAt(j) - 'a';
+                
+                if (curr.child[c] == null) {
+                    break;
+                }
+                
+                curr = curr.child[c];
+            }
+            
+            ans[i] = curr.idx;
+        }
+        
+        return ans;
+    }
+}
