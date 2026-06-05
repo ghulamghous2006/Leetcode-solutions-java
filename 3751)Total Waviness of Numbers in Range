@@ -1,0 +1,26 @@
+class Solution {
+
+    public long totalWaviness(long num1, long num2) {
+        long ans = 0;
+
+        for (long x = num1; x <= num2; x++) {
+            String s = String.valueOf(x);
+            int cnt = 0;
+
+            for (int i = 1; i < s.length() - 1; i++) {
+                char prev = s.charAt(i - 1);
+                char cur = s.charAt(i);
+                char next = s.charAt(i + 1);
+
+                if ((cur > prev && cur > next) ||
+                    (cur < prev && cur < next)) {
+                    cnt++;
+                }
+            }
+
+            ans += cnt;
+        }
+
+        return ans;
+    }
+}
